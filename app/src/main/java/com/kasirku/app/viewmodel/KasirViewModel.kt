@@ -48,6 +48,9 @@ class KasirViewModel(application: Application) : AndroidViewModel(application) {
     val allUsers: StateFlow<List<Cashier>> = userRepo.getAllUsers()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    val userCount: StateFlow<Int> = userRepo.getUserCount()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+
     private val _loginError = MutableStateFlow<String?>(null)
     val loginError: StateFlow<String?> = _loginError.asStateFlow()
 
@@ -686,6 +689,22 @@ class KasirViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // ==================== SEED DATA ====================
+
+    fun seedDefaultCashiers() {
+        viewModelScope.launch {
+            val count = userRepo.getUserCountSync()
+            if (count == 0) {
+                val defaults = listOf(
+                    Cashier(name = "Admin", pin = "0000", role = Cashier.ROLE_ADMIN),
+                    Cashier(name = "Andi", pin = "1234", role = Cashier.ROLE_CASHIER),
+                    Cashier(name = "Sari", pin = "5678", role = Cashier.ROLE_CASHIER),
+                    Cashier(name = "Budi", pin = "9012", role = Cashier.ROLE_CASHIER)
+                )
+                defaults.forEach { userRepo.insert(it) }
+            }
+        }
+    }
+
     fun seedSampleProducts() {
         viewModelScope.launch {
             val count = productCount.value
@@ -928,6 +947,7 @@ class KasirViewModel(application: Application) : AndroidViewModel(application) {
     init {
         loadStoreConfig()
         _themeMode.value = storeConfig.themeMode
+        seedDefaultCashiers()
         calculateTopProducts()
         calculateDailySales()
         NotificationHelper.createNotificationChannel(getApplication())

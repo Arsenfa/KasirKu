@@ -33,6 +33,9 @@ interface UserDao {
     @Query("SELECT COUNT(*) FROM cashiers WHERE isActive = 1")
     fun getUserCount(): Flow<Int>
 
+    @Query("SELECT COUNT(*) FROM cashiers WHERE isActive = 1")
+    suspend fun getUserCountSync(): Int
+
     @Query("SELECT COUNT(*) FROM cashiers WHERE isActive = 1 AND role = 'admin'")
     suspend fun getAdminCount(): Int
 }

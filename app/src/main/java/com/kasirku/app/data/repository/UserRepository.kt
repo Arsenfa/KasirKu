@@ -14,5 +14,6 @@ class UserRepository(private val dao: UserDao) {
     suspend fun delete(id: Long) = dao.softDelete(id)
     suspend fun resetPin(id: Long, newPin: String) = dao.resetPin(id, newPin)
     fun getUserCount(): Flow<Int> = dao.getUserCount()
+    suspend fun getUserCountSync(): Int = dao.getUserCountSync()
     suspend fun getAdminCount(): Int = dao.getAdminCount()
 }
