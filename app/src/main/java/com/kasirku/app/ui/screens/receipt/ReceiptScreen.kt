@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,6 +30,20 @@ fun ReceiptScreen(viewModel: KasirViewModel) {
     val transaction by viewModel.lastTransaction.collectAsState()
     val config = viewModel.storeConfig
     val context = LocalContext.current
+
+    // Handle null transaction — redirect to dashboard if no transaction data
+    if (transaction == null) {
+        LaunchedEffect(Unit) {
+            viewModel.navigateTo(if (viewModel.isAdmin) "admin_hub" else "dashboard")
+        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Memuat...", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        return
+    }
 
     Column(
         modifier = Modifier
@@ -86,7 +101,7 @@ fun ReceiptScreen(viewModel: KasirViewModel) {
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    tx.items.split("|").forEach { item ->
+                    tx.items.split("§").forEach { item ->
                         Text(item, style = MaterialTheme.typography.bodyMedium)
                         Spacer(modifier = Modifier.height(2.dp))
                     }
@@ -147,7 +162,7 @@ fun ReceiptScreen(viewModel: KasirViewModel) {
                         appendLine(SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID")).format(Date(tx.createdAt)))
                         appendLine("Kasir: ${tx.cashierName}")
                         appendLine("─".repeat(30))
-                        tx.items.split("|").forEach { appendLine(it) }
+                        tx.items.split("§").forEach { appendLine(it) }
                         appendLine("─".repeat(30))
                         appendLine("Subtotal: ${KasirViewModel.formatRupiah(tx.subtotal)}")
                         appendLine("Pajak (${tx.taxPercent.toInt()}%): ${KasirViewModel.formatRupiah(tx.taxAmount)}")
@@ -197,7 +212,7 @@ fun ReceiptScreen(viewModel: KasirViewModel) {
                             appendLine("─".repeat(30))
                             appendLine(tx.invoiceNumber)
                             appendLine("Kasir: ${tx.cashierName}")
-                            tx.items.split("|").forEach { appendLine(it) }
+                            tx.items.split("§").forEach { appendLine(it) }
                             appendLine("─".repeat(30))
                             appendLine("TOTAL: ${KasirViewModel.formatRupiah(tx.total)}")
                             appendLine(config.receiptFooter)
@@ -218,7 +233,7 @@ fun ReceiptScreen(viewModel: KasirViewModel) {
                             invoice = tx.invoiceNumber,
                             date = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID")).format(Date(tx.createdAt)),
                             cashier = tx.cashierName,
-                            items = tx.items.split("|"),
+                            items = tx.items.split("§"),
                             subtotal = KasirViewModel.formatRupiah(tx.subtotal),
                             discount = if (tx.discountAmount > 0) KasirViewModel.formatRupiah(tx.discountAmount) else "",
                             tax = KasirViewModel.formatRupiah(tx.taxAmount),

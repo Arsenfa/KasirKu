@@ -323,7 +323,7 @@ class KasirViewModel(application: Application) : AndroidViewModel(application) {
 
             val transaction = Transaction(
                 invoiceNumber = invoice,
-                items = _cartItems.value.joinToString("|") { "${it.product.name} x${it.quantity} ${it.product.price}" },
+                items = _cartItems.value.joinToString("§") { "${it.product.name} x${it.quantity} ${it.product.price}" },
                 subtotal = cartSubtotal.value,
                 taxPercent = _taxPercent.value,
                 taxAmount = cartTaxWithDiscount.value,
@@ -434,7 +434,7 @@ class KasirViewModel(application: Application) : AndroidViewModel(application) {
             }.take(1).collect { itemsList ->
                 val productCounts = mutableMapOf<String, Int>()
                 itemsList.forEach { items ->
-                    items.split("|").forEach { itemStr ->
+                    items.split("§").forEach { itemStr ->
                         // Parse "Product x2 15000.0" format
                         val parts = itemStr.trim().split(" x")
                         if (parts.size >= 2) {

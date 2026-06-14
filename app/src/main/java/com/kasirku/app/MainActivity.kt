@@ -2,6 +2,8 @@ package com.kasirku.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContent
@@ -88,6 +90,27 @@ fun KasirKuApp(viewModel: KasirViewModel) {
     val cashierScreens = listOf("dashboard", "history", "reports", "settings")
     val adminScreens = listOf("admin_hub", "dashboard", "history", "reports")
     val showBottomNav = currentScreen in (if (isAdmin) adminScreens else cashierScreens)
+
+    // Back navigation handler
+    val adminSubScreens = listOf("manage_products", "manage_cashiers", "manage_promos", "manage_categories", "store_settings", "shift")
+    BackHandler(enabled = currentScreen != "splash" && currentScreen != "login") {
+        when (currentScreen) {
+            "payment" -> viewModel.navigateTo("dashboard")
+            "receipt" -> viewModel.navigateTo(if (isAdmin) "admin_hub" else "dashboard")
+            in adminSubScreens -> viewModel.navigateTo("admin_hub")
+            "dashboard", "history", "reports" -> {
+                if (isAdmin) viewModel.navigateTo("admin_hub")
+                // For cashier on main tabs, do nothing (let system handle = exit app)
+            }
+            "settings" -> viewModel.navigateTo("dashboard")
+            "admin_hub" -> {
+                if (isAdmin) {
+                    // Admin on hub: do nothing (let system handle = exit app)
+                }
+            }
+            else -> { /* do nothing for unknown screens */ }
+        }
+    }
 
     Scaffold(
         bottomBar = {

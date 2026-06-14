@@ -48,7 +48,7 @@ fun HistoryScreen(viewModel: KasirViewModel) {
                     Text("Kasir: ${tx.cashierName}", style = MaterialTheme.typography.labelMedium)
                     HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
-                    tx.items.split("|").forEach { item ->
+                    tx.items.split("§").forEach { item ->
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -202,7 +202,7 @@ fun HistoryScreen(viewModel: KasirViewModel) {
                         }
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            "${tx.items.split("|").size} item • ${tx.cashierName}",
+                            "${tx.items.split("§").size} item • ${tx.cashierName}",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

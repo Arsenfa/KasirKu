@@ -1,16 +1,29 @@
 package com.kasirku.app.ui.screens.receipt
 
+import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.content.ContextCompat
 import java.io.OutputStream
 import java.util.*
 
 object BluetoothPrinter {
     private val PRINTER_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
+    fun hasBluetoothPermission(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true // Pre-Android 12, BLUETOOTH is a normal permission
+        }
+    }
+
     fun getPairedPrinters(context: Context): List<BluetoothDevice> {
+        if (!hasBluetoothPermission(context)) return emptyList()
         val adapter = BluetoothAdapter.getDefaultAdapter() ?: return emptyList()
         return try {
             adapter.bondedDevices?.filter { device ->
