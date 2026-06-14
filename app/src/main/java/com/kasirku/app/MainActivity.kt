@@ -14,7 +14,11 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.AdminPanelSettings
+import androidx.compose.material.icons.outlined.Analytics
+import androidx.compose.material.icons.outlined.MoreHoriz
+import androidx.compose.material.icons.outlined.PointOfSale
+import androidx.compose.material.icons.outlined.Receipt
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -73,17 +77,17 @@ fun KasirKuApp(viewModel: KasirViewModel) {
 
     val bottomNavItems = if (isAdmin) {
         listOf(
-            BottomNavItem("admin_hub", "Admin", Icons.Default.AdminPanelSettings),
-            BottomNavItem("dashboard", "Kasir", Icons.Default.PointOfSale),
-            BottomNavItem("history", "Riwayat", Icons.Default.Receipt),
-            BottomNavItem("reports", "Laporan", Icons.Default.Analytics)
+            BottomNavItem("admin_hub", "Admin", Icons.Outlined.AdminPanelSettings),
+            BottomNavItem("dashboard", "Kasir", Icons.Outlined.PointOfSale),
+            BottomNavItem("history", "Riwayat", Icons.Outlined.Receipt),
+            BottomNavItem("reports", "Laporan", Icons.Outlined.Analytics)
         )
     } else {
         listOf(
-            BottomNavItem("dashboard", "Kasir", Icons.Default.PointOfSale),
-            BottomNavItem("history", "Riwayat", Icons.Default.Receipt),
-            BottomNavItem("reports", "Laporan", Icons.Default.Analytics),
-            BottomNavItem("settings", "Lainnya", Icons.Default.MoreHoriz)
+            BottomNavItem("dashboard", "Kasir", Icons.Outlined.PointOfSale),
+            BottomNavItem("history", "Riwayat", Icons.Outlined.Receipt),
+            BottomNavItem("reports", "Laporan", Icons.Outlined.Analytics),
+            BottomNavItem("settings", "Lainnya", Icons.Outlined.MoreHoriz)
         )
     }
 

@@ -522,9 +522,22 @@ class KasirViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun deleteCashier(cashierId: Long) {
+    fun deleteCashier(cashierId: Long, onResult: ((Boolean, String) -> Unit)? = null) {
         viewModelScope.launch {
+            val user = userRepo.getUserById(cashierId) ?: run {
+                onResult?.invoke(false, "User tidak ditemukan")
+                return@launch
+            }
+            // Prevent deleting the last admin
+            if (user.isAdmin()) {
+                val adminCount = userRepo.getAdminCount()
+                if (adminCount <= 1) {
+                    onResult?.invoke(false, "Tidak bisa menghapus admin terakhir")
+                    return@launch
+                }
+            }
             userRepo.delete(cashierId)
+            onResult?.invoke(true, "${user.name} berhasil dihapus")
         }
     }
 

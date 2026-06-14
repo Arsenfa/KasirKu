@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons)
+    implementation(libs.compose.ui.google.fonts)
     implementation(libs.compose.activity)
     debugImplementation(libs.compose.ui.tooling)
 

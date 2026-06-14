@@ -30,6 +30,7 @@ fun ManageCashiersScreen(viewModel: KasirViewModel) {
 
     var showDeleteDialog by remember { mutableStateOf<Cashier?>(null) }
     var showResetPinDialog by remember { mutableStateOf<Cashier?>(null) }
+    var snackbarMessage by remember { mutableStateOf<String?>(null) }
 
     // Cashier Form Dialog
     if (showForm) {
@@ -104,7 +105,9 @@ fun ManageCashiersScreen(viewModel: KasirViewModel) {
             confirmButton = {
                 Button(
                     onClick = {
-                        viewModel.deleteCashier(cashier.id)
+                        viewModel.deleteCashier(cashier.id) { success, message ->
+                            snackbarMessage = message
+                        }
                         showDeleteDialog = null
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = DangerRed),
@@ -242,6 +245,30 @@ fun ManageCashiersScreen(viewModel: KasirViewModel) {
                     onEdit = { viewModel.openEditCashierForm(user) },
                     onDelete = { showDeleteDialog = user },
                     onResetPin = { showResetPinDialog = user }
+                )
+            }
+        }
+
+        // Snackbar message
+        snackbarMessage?.let { message ->
+            LaunchedEffect(message) {
+                kotlinx.coroutines.delay(3000)
+                snackbarMessage = null
+            }
+            Card(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (message.contains("berhasil")) SuccessGreen.copy(alpha = 0.15f)
+                    else DangerRed.copy(alpha = 0.15f)
+                )
+            ) {
+                Text(
+                    text = message,
+                    modifier = Modifier.padding(12.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = if (message.contains("berhasil")) SuccessGreen else DangerRed
                 )
             }
         }

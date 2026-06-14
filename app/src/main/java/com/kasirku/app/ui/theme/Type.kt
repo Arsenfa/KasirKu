@@ -2,66 +2,108 @@ package com.kasirku.app.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
+import com.kasirku.app.R
+
+private val provider = GoogleFont.Provider(
+    providerAuthority = "com.google.android.gms.fonts",
+    providerPackage = "com.google.android.gms",
+    certificates = R.array.com_google_android_gms_fonts_certs
+)
+
+private val plusJakartaSansFont = GoogleFont("Plus Jakarta Sans")
+
+val PlusJakartaSans = FontFamily(
+    Font(googleFont = plusJakartaSansFont, fontProvider = provider, weight = FontWeight.Normal),
+    Font(googleFont = plusJakartaSansFont, fontProvider = provider, weight = FontWeight.Medium),
+    Font(googleFont = plusJakartaSansFont, fontProvider = provider, weight = FontWeight.SemiBold),
+    Font(googleFont = plusJakartaSansFont, fontProvider = provider, weight = FontWeight.Bold),
+    Font(googleFont = plusJakartaSansFont, fontProvider = provider, weight = FontWeight.ExtraBold),
+)
 
 val KasirKuTypography = Typography(
     headlineLarge = TextStyle(
-        fontFamily = FontFamily.SansSerif,
+        fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
-        lineHeight = 32.sp
+        lineHeight = 32.sp,
+        letterSpacing = (-0.25).sp
     ),
     headlineMedium = TextStyle(
-        fontFamily = FontFamily.SansSerif,
+        fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.SemiBold,
         fontSize = 20.sp,
-        lineHeight = 28.sp
+        lineHeight = 28.sp,
+        letterSpacing = (-0.15).sp
     ),
     headlineSmall = TextStyle(
-        fontFamily = FontFamily.SansSerif,
+        fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp,
         lineHeight = 24.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = FontFamily.SansSerif,
+        fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 20.sp,
+        fontSize = 18.sp,
         lineHeight = 28.sp
     ),
+    titleMedium = TextStyle(
+        fontFamily = PlusJakartaSans,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    ),
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.SansSerif,
+        fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp
     ),
     bodyMedium = TextStyle(
-        fontFamily = FontFamily.SansSerif,
+        fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 20.sp
     ),
+    bodySmall = TextStyle(
+        fontFamily = PlusJakartaSans,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp
+    ),
     labelLarge = TextStyle(
-        fontFamily = FontFamily.SansSerif,
+        fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.SemiBold,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.01.sp
     ),
     labelMedium = TextStyle(
-        fontFamily = FontFamily.SansSerif,
+        fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
         lineHeight = 16.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = PlusJakartaSans,
+        fontWeight = FontWeight.Medium,
+        fontSize = 11.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.05.sp
     )
 )
 
 // Custom style for price display
 val PriceDisplayStyle = TextStyle(
-    fontFamily = FontFamily.SansSerif,
+    fontFamily = PlusJakartaSans,
     fontWeight = FontWeight.Bold,
-    fontSize = 22.sp,
-    lineHeight = 28.sp
+    fontSize = 20.sp,
+    lineHeight = 28.sp,
+    letterSpacing = (-0.25).sp
 )

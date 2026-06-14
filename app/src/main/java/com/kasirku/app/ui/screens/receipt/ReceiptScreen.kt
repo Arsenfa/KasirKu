@@ -18,6 +18,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import android.content.Intent
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.kasirku.app.ui.theme.DangerRed
 import com.kasirku.app.ui.theme.SuccessGreen
 import com.kasirku.app.ui.theme.TealPrimary
@@ -30,6 +34,13 @@ fun ReceiptScreen(viewModel: KasirViewModel) {
     val transaction by viewModel.lastTransaction.collectAsState()
     val config = viewModel.storeConfig
     val context = LocalContext.current
+
+    // Bluetooth permission launcher
+    val btPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        // Permission result handled on next button tap
+    }
 
     // Handle null transaction — redirect to dashboard if no transaction data
     if (transaction == null) {
@@ -203,6 +214,16 @@ fun ReceiptScreen(viewModel: KasirViewModel) {
         OutlinedButton(
             onClick = {
                 transaction?.let { tx ->
+                    // Request Bluetooth permission on Android 12+ before accessing printers
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                        val granted = ContextCompat.checkSelfPermission(
+                            context, android.Manifest.permission.BLUETOOTH_CONNECT
+                        ) == PackageManager.PERMISSION_GRANTED
+                        if (!granted) {
+                            btPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT)
+                            return@let
+                        }
+                    }
                     val printers = BluetoothPrinter.getPairedPrinters(context)
                     if (printers.isEmpty()) {
                         // No paired printers, try to share as text instead

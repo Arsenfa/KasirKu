@@ -21,6 +21,9 @@ data class Transaction(
     val cashierName: String,
     val createdAt: Long = System.currentTimeMillis()
 ) {
-    val profit: Double get() = subtotal - totalCost
-    val marginPercent: Double get() = if (subtotal > 0) (profit / subtotal) * 100 else 0.0
+    val profit: Double get() = (subtotal - discountAmount) - totalCost
+    val marginPercent: Double get() {
+        val revenue = subtotal - discountAmount
+        return if (revenue > 0) (profit / revenue) * 100 else 0.0
+    }
 }

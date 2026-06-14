@@ -177,7 +177,7 @@ fun PaymentScreen(viewModel: KasirViewModel) {
         Button(
             onClick = { viewModel.confirmPayment() },
             modifier = Modifier.fillMaxWidth().height(52.dp),
-            enabled = selectedMethod != "Tunai" || amountPaid >= total,
+            enabled = if (selectedMethod == "Tunai") amountPaid >= total && total > 0 else total > 0,
             colors = ButtonDefaults.buttonColors(containerColor = TealPrimary),
             shape = RoundedCornerShape(12.dp)
         ) { Text("Konfirmasi Pembayaran", fontWeight = FontWeight.Bold) }
