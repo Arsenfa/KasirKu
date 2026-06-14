@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">KasirKu</string>
+    <string name="tagline">Aplikasi Kasir Pintar</string>
+    
+    <!-- Navigation -->
+    <string name="nav_kasir">Kasir</string>
+    <string name="nav_riwayat">Riwayat</string>
+    <string name="nav_laporan">Laporan</string>
+    <string name="nav_lainnya">Lainnya</string>
+    
+    <!-- Splash -->
+    <string name="splash_version">v1.0.0</string>
+    
+    <!-- Login -->
+    <string name="login_title">Pilih Kasir</string>
+    <string name="login_pin_hint">Masukkan PIN</string>
+    <string name="login_button">Masuk</string>
+    
+    <!-- Dashboard -->
+    <string name="search_hint">Cari produk...</string>
+    <string name="category_all">Semua</string>
+    <string name="category_food">Makanan</string>
+    <string name="category_drink">Minuman</string>
+    <string name="category_snack">Snack</string>
+    <string name="category_dessert">Dessert</string>
+    <string name="cart_label">Keranjang</string>
+    
+    <!-- Payment -->
+    <string name="payment_title">Pembayaran</string>
+    <string name="payment_method_cash">Tunai</string>
+    <string name="payment_method_qris">QRIS</string>
+    <string name="payment_method_transfer">Transfer</string>
+    <string name="payment_subtotal">Subtotal</string>
+    <string name="payment_tax">Pajak</string>
+    <string name="payment_total">Total</string>
+    <string name="payment_change">Kembalian</string>
+    <string name="payment_confirm">Konfirmasi Pembayaran</string>
+    
+    <!-- Receipt -->
+    <string name="receipt_success">Pembayaran Berhasil!</string>
+    <string name="receipt_share_wa">Share via WA</string>
+    <string name="receipt_save_pdf">Simpan PDF</string>
+    <string name="receipt_new_transaction">Transaksi Baru</string>
+    <string name="receipt_thank_you">Terima kasih!</string>
+    
+    <!-- History -->
+    <string name="history_title">Riwayat Transaksi</string>
+    <string name="history_today">Hari Ini</string>
+    <string name="history_yesterday">Kemarin</string>
+    <string name="history_this_week">Minggu Ini</string>
+    <string name="history_this_month">Bulan Ini</string>
+    
+    <!-- Reports -->
+    <string name="report_title">Laporan</string>
+    <string name="report_sales">Penjualan</string>
+    <string name="report_transactions">Transaksi</string>
+    <string name="report_average">Rata-rata</string>
+    <string name="report_chart_title">Grafik Penjualan</string>
+    <string name="report_top_products">Produk Terlaris</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_store_info">Info Toko</string>
+    <string name="settings_tax">Pajak &amp; Mata Uang</string>
+    <string name="settings_products">Produk</string>
+    <string name="settings_manage_products">Kelola Produk</string>
+    <string name="settings_manage_categories">Kelola Kategori</string>
+    <string name="settings_appearance">Tampilan</string>
+    <string name="settings_data">Data</string>
+    <string name="settings_export">Export Data</string>
+    <string name="settings_backup">Backup &amp; Restore</string>
+    
+    <!-- Common -->
+    <string name="currency_format">Rp %s</string>
+    <string name="items_count">%d item</string>
+</resources>
