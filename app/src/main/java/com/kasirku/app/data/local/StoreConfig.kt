@@ -30,4 +30,24 @@ class StoreConfig(context: Context) {
     var themeMode: String
         get() = prefs.getString("theme_mode", "auto") ?: "auto"
         set(value) = prefs.edit().putString("theme_mode", value).apply()
+
+    // Onboarding completed flag
+    var onboardingCompleted: Boolean
+        get() = prefs.getBoolean("onboarding_completed", false)
+        set(value) = prefs.edit().putBoolean("onboarding_completed", value).apply()
+
+    // Custom categories (comma-separated string)
+    var customCategories: String
+        get() = prefs.getString("custom_categories", "") ?: ""
+        set(value) = prefs.edit().putString("custom_categories", value).apply()
+
+    fun getCustomCategoriesList(): List<String> {
+        val raw = customCategories
+        return if (raw.isBlank()) emptyList()
+        else raw.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+    }
+
+    fun setCustomCategoriesList(list: List<String>) {
+        customCategories = list.joinToString(",")
+    }
 }

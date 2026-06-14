@@ -1,5 +1,6 @@
 package com.kasirku.app.ui.screens.dashboard
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -17,6 +18,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kasirku.app.ui.components.CartBar
@@ -41,6 +43,12 @@ fun DashboardScreen(
     val cartItems by viewModel.cartItems.collectAsState()
     val showCart by viewModel.showCart.collectAsState()
     val currentCashier by viewModel.currentCashier.collectAsState()
+
+    // Notification check
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.checkAndNotify(context)
+    }
 
     val allCategories = listOf("Semua") + categories
     val isAdmin = currentCashier?.isAdmin() == true

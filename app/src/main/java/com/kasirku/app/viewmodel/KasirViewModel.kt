@@ -1,9 +1,11 @@
 package com.kasirku.app.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.kasirku.app.data.local.AppDatabase
+import com.kasirku.app.data.local.NotificationHelper
 import com.kasirku.app.data.local.PaymentMethodSummary
 import com.kasirku.app.data.local.StoreConfig
 import com.kasirku.app.data.model.*
@@ -928,6 +930,46 @@ class KasirViewModel(application: Application) : AndroidViewModel(application) {
         _themeMode.value = storeConfig.themeMode
         calculateTopProducts()
         calculateDailySales()
+        NotificationHelper.createNotificationChannel(getApplication())
+    }
+
+    // ==================== CATEGORY MANAGEMENT ====================
+    fun renameCategory(oldName: String, newName: String) {
+        viewModelScope.launch {
+            productRepo.renameCategory(oldName, newName)
+        }
+    }
+
+    fun checkAndDeleteCategory(category: String, onResult: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            val count = productRepo.countActiveProductsInCategory(category)
+            if (count > 0) {
+                onResult(false, "Tidak bisa menghapus '$category': masih ada $count produk aktif")
+            } else {
+                // Remove from custom categories if present
+                val customList = storeConfig.getCustomCategoriesList()
+                if (category in customList) {
+                    storeConfig.setCustomCategoriesList(customList - category)
+                }
+                onResult(true, "Kategori '$category' berhasil dihapus")
+            }
+        }
+    }
+
+    // ==================== NOTIFICATIONS ====================
+    fun checkAndNotify(context: Context) {
+        viewModelScope.launch {
+            val lowStock = lowStockCount.value
+            if (lowStock > 0) {
+                NotificationHelper.showLowStockNotification(context, lowStock)
+            }
+
+            val shift = activeShift.value
+            val cashier = _currentCashier.value
+            if (shift == null && cashier != null && cashier.isCashier()) {
+                NotificationHelper.showShiftReminderNotification(context)
+            }
+        }
     }
 
     companion object {

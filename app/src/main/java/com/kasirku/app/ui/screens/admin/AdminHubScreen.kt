@@ -210,6 +210,13 @@ fun AdminHubScreen(viewModel: KasirViewModel) {
                 color = TealPrimary,
                 onClick = { viewModel.navigateTo("shift") }
             )
+            AdminMenuCard(
+                icon = Icons.Default.Category,
+                title = "Kelola Kategori",
+                subtitle = "Tambah, ubah, hapus kategori produk",
+                color = SuccessGreen,
+                onClick = { viewModel.navigateTo("manage_categories") }
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))

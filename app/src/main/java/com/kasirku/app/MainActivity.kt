@@ -4,6 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -16,6 +22,7 @@ import com.kasirku.app.ui.screens.admin.*
 import com.kasirku.app.ui.screens.dashboard.DashboardScreen
 import com.kasirku.app.ui.screens.history.HistoryScreen
 import com.kasirku.app.ui.screens.login.LoginScreen
+import com.kasirku.app.ui.screens.onboarding.OnboardingScreen
 import com.kasirku.app.ui.screens.payment.PaymentScreen
 import com.kasirku.app.ui.screens.receipt.ReceiptScreen
 import com.kasirku.app.ui.screens.reports.ReportsScreen
@@ -57,6 +64,10 @@ fun KasirKuApp(viewModel: KasirViewModel) {
     }
 
     val isAdmin = currentCashier?.isAdmin() == true
+
+    // Check onboarding status
+    val onboardingCompleted = viewModel.storeConfig.onboardingCompleted
+    val showOnboarding = !onboardingCompleted && currentScreen == "splash"
 
     val bottomNavItems = if (isAdmin) {
         listOf(
@@ -100,21 +111,45 @@ fun KasirKuApp(viewModel: KasirViewModel) {
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-            when (currentScreen) {
-                "splash" -> SplashScreen(onTimeout = { viewModel.navigateTo("login") })
-                "login" -> LoginScreen(viewModel)
-                "admin_hub" -> AdminHubScreen(viewModel)
-                "dashboard" -> DashboardScreen(viewModel = viewModel, onNavigateToPayment = { viewModel.navigateTo("payment") })
-                "payment" -> PaymentScreen(viewModel)
-                "receipt" -> ReceiptScreen(viewModel)
-                "history" -> HistoryScreen(viewModel)
-                "reports" -> ReportsScreen(viewModel)
-                "settings" -> SettingsScreen(viewModel)
-                "manage_products" -> ManageProductsScreen(viewModel)
-                "manage_cashiers" -> ManageCashiersScreen(viewModel)
-                "manage_promos" -> ManagePromosScreen(viewModel)
-                "store_settings" -> StoreSettingsScreen(viewModel)
-                "shift" -> ShiftScreen(viewModel)
+            // Show onboarding overlay if not completed
+            if (showOnboarding) {
+                OnboardingScreen(
+                    onComplete = {
+                        viewModel.storeConfig.onboardingCompleted = true
+                        viewModel.navigateTo("login")
+                    },
+                    onSkip = {
+                        viewModel.storeConfig.onboardingCompleted = true
+                        viewModel.navigateTo("login")
+                    }
+                )
+            } else {
+                AnimatedContent(
+                    targetState = currentScreen,
+                    transitionSpec = {
+                        (slideInHorizontally { width -> width } + fadeIn()) togetherWith
+                                (slideOutHorizontally { width -> -width } + fadeOut())
+                    },
+                    label = "ScreenTransition"
+                ) { screen ->
+                    when (screen) {
+                        "splash" -> SplashScreen(onTimeout = { viewModel.navigateTo("login") })
+                        "login" -> LoginScreen(viewModel)
+                        "admin_hub" -> AdminHubScreen(viewModel)
+                        "dashboard" -> DashboardScreen(viewModel = viewModel, onNavigateToPayment = { viewModel.navigateTo("payment") })
+                        "payment" -> PaymentScreen(viewModel)
+                        "receipt" -> ReceiptScreen(viewModel)
+                        "history" -> HistoryScreen(viewModel)
+                        "reports" -> ReportsScreen(viewModel)
+                        "settings" -> SettingsScreen(viewModel)
+                        "manage_products" -> ManageProductsScreen(viewModel)
+                        "manage_cashiers" -> ManageCashiersScreen(viewModel)
+                        "manage_promos" -> ManagePromosScreen(viewModel)
+                        "manage_categories" -> ManageCategoriesScreen(viewModel)
+                        "store_settings" -> StoreSettingsScreen(viewModel)
+                        "shift" -> ShiftScreen(viewModel)
+                    }
+                }
             }
         }
     }

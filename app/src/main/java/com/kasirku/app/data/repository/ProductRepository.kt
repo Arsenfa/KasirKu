@@ -21,4 +21,6 @@ class ProductRepository(private val dao: ProductDao) {
     suspend fun update(product: Product) = dao.update(product)
     suspend fun delete(id: Long) = dao.softDelete(id)
     suspend fun updateStock(id: Long, newStock: Int) = dao.updateStock(id, newStock)
+    suspend fun renameCategory(oldCategory: String, newCategory: String) = dao.renameCategory(oldCategory, newCategory)
+    suspend fun countActiveProductsInCategory(category: String): Int = dao.countActiveProductsInCategory(category)
 }

@@ -53,4 +53,10 @@ interface ProductDao {
 
     @Query("SELECT SUM(stock) FROM products WHERE isActive = 1")
     fun getTotalStock(): Flow<Int?>
+
+    @Query("UPDATE products SET category = :newCategory, updatedAt = :updatedAt WHERE category = :oldCategory")
+    suspend fun renameCategory(oldCategory: String, newCategory: String, updatedAt: Long = System.currentTimeMillis())
+
+    @Query("SELECT COUNT(*) FROM products WHERE isActive = 1 AND category = :category")
+    suspend fun countActiveProductsInCategory(category: String): Int
 }
